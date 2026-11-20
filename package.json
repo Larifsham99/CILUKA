@@ -1,0 +1,31 @@
+{
+  "name": "ciluka",
+  "private": true,
+  "version": "1.0.0",
+  "description": "CILUKA — Kecil-Kecil, Hebat-Hebat! Aplikasi permainan pembelajaran Bahasa Melayu untuk kanak-kanak 3–6 tahun.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host",
+    "typecheck": "tsc -b --noEmit",
+    "test": "vitest run",
+    "test:e2e": "node tests/e2e/play-all.cjs http://localhost:4173/ test-shots && node tests/e2e/levels-smoke.cjs http://localhost:4173/"
+  },
+  "dependencies": {
+    "@fontsource/andika": "^5.3.0",
+    "@fontsource/baloo-2": "^5.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.6.3",
+    "vite": "^6.4.1",
+    "vite-plugin-pwa": "^1.0.3",
+    "vitest": "^2.1.8"
+  }
+}
