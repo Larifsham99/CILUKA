@@ -55,3 +55,7 @@ src/
   worlds/       ilustrasi pulau
 tests/e2e/      ujian Playwright
 ```
+
+## Deploy (GitHub Pages)
+
+Fail `.github/workflows/deploy-pages.yml` membina dan menerbitkan aplikasi secara automatik setiap kali kod di-push ke `main` atau `ccr-da07db69-i51u18`. Sekali sahaja: di GitHub, buka **Settings → Pages → Build and deployment → Source: GitHub Actions**. Alamat: `https://larifsham99.github.io/CILUKA/`.
