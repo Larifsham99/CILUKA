@@ -1,0 +1,15 @@
+{
+  "name": "CILUKA — Kecil-Kecil, Hebat-Hebat!",
+  "short_name": "CILUKA",
+  "description": "Dunia pengembaraan belajar huruf, menulis dan mengeja untuk kanak-kanak 3–6 tahun.",
+  "lang": "ms",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFC93C",
+  "theme_color": "#FFC93C",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
