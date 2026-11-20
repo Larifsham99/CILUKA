@@ -8,7 +8,6 @@ import { LINES, pick } from '../data/dialog';
 import type { PipMood, WorldId } from '../data/types';
 import { GAMES, WORLDS } from '../data/worlds';
 import { store, useStore } from '../hooks/useStore';
-import { letterName } from '../audio/audio';
 import { totalStars, worldStars, worldUnlock } from '../services/levels';
 import { chestAvailable, missionDone, nextMissionStep } from '../services/missions';
 import { playerLevel } from '../services/rewards';
@@ -122,7 +121,7 @@ export function HomePage() {
           <div className="mission-info">
           <div className="mission-head">
             <span className="mission-label">Misi Hari Ini</span>
-            <span className="mission-focus glyph" aria-label={`Huruf ${letterName(data.daily?.focus ?? 'a')}`}>{data.daily?.focus.toUpperCase()}{data.daily?.focus}</span>
+            <span className="mission-focus glyph" aria-label={`Huruf ${(data.daily?.focus ?? 'a').toUpperCase()}`}>{data.daily?.focus.toUpperCase()}{data.daily?.focus}</span>
           </div>
           <div className="mission-steps">
             {data.daily?.steps.map((s, i) => (

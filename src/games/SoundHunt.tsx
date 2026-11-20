@@ -1,6 +1,6 @@
 /** GAME 4 — Cari Bunyi (Sound Hunt): dengar bunyi awal perkataan, pilih huruf yang sepadan. */
 import { useEffect, useMemo, useState } from 'react';
-import { letterSound, sfx, speak } from '../audio/audio';
+import { soundCue, sfx, speak } from '../audio/audio';
 import { SOUND_LETTERS, SOUND_WORD } from '../data/letters';
 import { ObjectArt } from '../components/ObjectArt';
 import { distractors, focusLetters } from '../services/learning';
@@ -29,7 +29,7 @@ export default function SoundHunt({ level, ctx }: GameProps) {
   const word = SOUND_WORD[target];
   const options = useMemo(() => shuffle([target, ...distractors(ctx.data, target, cfg.options - 1, level, pool, 'S:')]), [round]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const play = () => speak(`Dengar... ${letterSound(target)}... ${letterSound(target)}... seperti ${word}. Huruf apa?`, { key: 'bunyi-' + target });
+  const play = () => speak(`Dengar baik-baik. ${word}. ${soundCue(target)}, ${soundCue(target)}, ${word}. Huruf apa?`);
   useEffect(() => {
     setWrongs([]); setSolved(false);
     ctx.setRepeat(play); ctx.question(); ctx.progress(round, cfg.rounds);

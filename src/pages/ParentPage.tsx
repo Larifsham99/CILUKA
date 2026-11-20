@@ -1,6 +1,6 @@
 /** Ruang Ibu Bapa: Laporan · Portfolio · Profil · Tetapan. Dilindungi pintu ibu bapa. */
 import { useMemo, useRef, useState } from 'react';
-import { malayVoiceInstalled, speak, voiceAvailable } from '../audio/audio';
+import { speak, voiceInfo } from '../audio/audio';
 import { Avatar, AVATARS } from '../characters/Avatar';
 import { BadgeIcon } from '../components/BadgeIcon';
 import { ObjectArt } from '../components/ObjectArt';
@@ -353,8 +353,15 @@ function SettingsPanel() {
   const [confirmReset, setConfirmReset] = useState(false);
   const [gate, setGate] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  const voiceInfo = useMemo(() => !voiceAvailable() ? 'Telefon ini tidak menyokong suara sintetik. Arahan dipaparkan sebagai teks oleh Pip.'
-    : malayVoiceInstalled() ? 'Suara Bahasa Melayu/Indonesia peranti ditemui.' : 'Suara Melayu belum dipasang pada telefon. Pasang "Bahasa Melayu" dalam tetapan Text-to-Speech telefon untuk sebutan yang lebih baik.', []);
+  const voiceText = useMemo(() => {
+    const v = voiceInfo();
+    const how = ' Cara pasang: Tetapan telefon → Pengurusan am / Sistem → Bahasa → Output teks-ke-pertuturan → Enjin pilihan (Google) → Pasang data suara → Bahasa Melayu.';
+    if (v.recordings > 0) return `Rakaman suara manusia digunakan (${v.recordings} fail).`;
+    if (v.kind === 'ms') return `Suara Bahasa Melayu digunakan: ${v.name}.`;
+    if (v.kind === 'id') return `Suara Bahasa Melayu tiada, jadi suara Indonesia digunakan (${v.name}). Sebutan mungkin sedikit berbeza.` + how;
+    if (v.kind === 'none') return 'Telefon ini tiada suara Bahasa Melayu, jadi Pip TIDAK bercakap (supaya tiada sebutan salah). Arahan dipaparkan sebagai teks.' + how;
+    return 'Suara telefon sedang disemak. Tekan "Uji suara".';
+  }, []);
 
   const exportFile = () => {
     try {
@@ -381,7 +388,7 @@ function SettingsPanel() {
       <section className="p-card">
         <h2>Bunyi</h2>
         {toggle('Kesan bunyi', s.sound, v => store.updateSettings({ sound: v }), 'set-sound')}
-        {toggle('Suara arahan', s.voice, v => store.updateSettings({ voice: v }), 'set-voice', voiceInfo)}
+        {toggle('Suara arahan', s.voice, v => store.updateSettings({ voice: v }), 'set-voice', voiceText)}
         <Btn size="sm" variant="white" onClick={() => speak('Hai! Aku Pip. Jom belajar huruf!')}>Uji suara</Btn>
       </section>
       <section className="p-card">

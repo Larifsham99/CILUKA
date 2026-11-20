@@ -65,8 +65,7 @@ Kemas kini terakhir: 20 November 2026 · Versi 1.0.0
 Ujian dijalankan dalam Chromium tanpa kepala (Playwright) pada saiz telefon. **Belum diuji pada telefon Android fizikal** — sila uji pada sekurang-kurangnya satu telefon sebenar sebelum dijual.
 
 ## Belum siap / batasan yang diketahui
-- **Suara**: menggunakan suara sintetik telefon (Web Speech). Rakaman suara manusia belum dihasilkan — sistem sudah menyokongnya (`AUDIO_ASSETS` dalam `src/audio/audio.ts`). Jika telefon tiada suara Melayu, sebutan mungkin bunyi Inggeris/Indonesia; Pip sentiasa memaparkan teks sebagai sandaran.
-- **Bunyi huruf (fonik)** disebut secara anggaran oleh suara sintetik; perlu rakaman sebenar untuk ketepatan.
+- **Suara**: suara sintetik telefon digunakan HANYA jika suara Bahasa Melayu (ms-MY) atau Indonesia (id-ID) ada; suara Inggeris tidak lagi digunakan. Nama huruf dieja ikut sebutan tadika Malaysia (I = "ai", H = "ec", K = "kei"), bunyi huruf guna suku kata pertama (bola → "bo"), simbol & perkataan huruf besar dinormalkan. Untuk sebutan 100% tepat, rakam 174 klip dalam `docs/SKRIP_RAKAMAN_SUARA.md` ke `public/audio/` dan jalankan `npm run audio:manifest` — aplikasi akan guna rakaman itu secara automatik.
 - **Templat tulisan** A–Z & a–z perlu disemak oleh guru prasekolah (arah dan susunan strok).
 - **Bank perkataan**: 34 perkataan dengan ilustrasi. Perlu dikembangkan (sasaran pelan: ~120).
 - **Penyimpanan**: localStorage sahaja. Data boleh hilang jika data pelayar dipadam — sandaran manual tersedia; sandaran awan belum dibina (pelan V1.1).

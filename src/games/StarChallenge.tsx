@@ -1,6 +1,6 @@
 /** GAME 11 — Cabaran Bintang (Mastery Challenge): soalan campuran merentasi kemahiran — huruf, bunyi, ejaan, perkataan. */
 import { useEffect, useMemo, useState } from 'react';
-import { letterName, letterSound, sfx, speak } from '../audio/audio';
+import { letterName, soundCue, sfx, speak } from '../audio/audio';
 import { ObjectArt } from '../components/ObjectArt';
 import { SOUND_LETTERS, SOUND_WORD } from '../data/letters';
 import { WORDS } from '../data/words';
@@ -29,7 +29,7 @@ export default function StarChallenge({ level, ctx }: GameProps) {
       if (kind === 'letter') out.push({ kind, key: 'L:' + f, answer: f, options: shuffle([f, ...distractors(ctx.data, f, o - 1, 4, pool)]), say: `Mana huruf ${letterName(f)}?` });
       else if (kind === 'sound') {
         const l = SOUND_LETTERS.includes(f) ? f : shuffle(SOUND_LETTERS.filter(x => pool.includes(x)))[0] ?? 'b';
-        out.push({ kind, key: 'S:' + l, answer: l, word: SOUND_WORD[l], options: shuffle([l, ...distractors(ctx.data, l, o - 1, 4, SOUND_LETTERS, 'S:')]), say: `Bunyi ${letterSound(l)}, seperti ${SOUND_WORD[l]}. Huruf apa?` });
+        out.push({ kind, key: 'S:' + l, answer: l, word: SOUND_WORD[l], options: shuffle([l, ...distractors(ctx.data, l, o - 1, 4, SOUND_LETTERS, 'S:')]), say: `${SOUND_WORD[l]}. ${soundCue(l)}, ${soundCue(l)}. Huruf apa?` });
       } else if (kind === 'missing') {
         const w = shuffle(WORDS.filter(x => x.level <= Math.min(3, level)))[0];
         const gap = Math.floor(Math.random() * w.word.length);

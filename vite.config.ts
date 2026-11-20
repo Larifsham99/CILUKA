@@ -29,7 +29,7 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2,mp3,ogg}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2,json,mp3,m4a,ogg}'],
         navigateFallback: 'index.html'
       }
     })

@@ -10,7 +10,9 @@
     "preview": "vite preview --host",
     "typecheck": "tsc -b --noEmit",
     "test": "vitest run",
-    "test:e2e": "node tests/e2e/play-all.cjs http://localhost:4173/ test-shots && node tests/e2e/levels-smoke.cjs http://localhost:4173/"
+    "test:e2e": "node tests/e2e/play-all.cjs http://localhost:4173/ test-shots && node tests/e2e/levels-smoke.cjs http://localhost:4173/",
+    "audio:manifest": "node scripts/build-audio-manifest.mjs",
+    "audio:script": "vite-node scripts/gen-voice-script.ts"
   },
   "dependencies": {
     "@fontsource/andika": "^5.3.0",

@@ -2,7 +2,7 @@
  *  anak tekan papan huruf yang betul (atau leret/kekunci kiri-kanan) untuk memandu kereta ke lorong itu.
  *  Betul = nitro (laju), salah = kereta perlahan sekejap. Tiada kemalangan, semua sampai ke garisan penamat. */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { letterName, sfx, speak } from '../audio/audio';
+import { letterName, soundCue, sfx, speak } from '../audio/audio';
 import { SOUND_LETTERS, SOUND_WORD } from '../data/letters';
 import { ObjectArt } from '../components/ObjectArt';
 import { distractors } from '../services/learning';
@@ -50,7 +50,7 @@ export default function LetterRace({ level, ctx }: GameProps) {
   const [finished, setFinished] = useState<number | null>(null);
   const state = useRef({ y: -140, offset: 0, speed: cfg.speed, boostUntil: 0, slowUntil: 0, gi: 0, judged: false, done: false, correct: 0, t0: performance.now(), progress: 0 });
 
-  const ask = (g: Gate) => speak(g.word ? `Bunyi awal ${g.word}. Pandu ke hurufnya!` : `Pandu ke huruf ${letterName(g.target)}!`);
+  const ask = (g: Gate) => speak(g.word ? `${g.word}. ${soundCue(g.target)}, ${soundCue(g.target)}. Pandu ke hurufnya!` : `Pandu ke huruf ${letterName(g.target)}!`);
 
   useEffect(() => { laneRef.current = lane; }, [lane]);
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function LetterRace({ level, ctx }: GameProps) {
         const right = chosen === g.target;
         ctx.answer('L:' + g.target, right, { chosen, quiet: true });
         if (right) { s.correct++; s.boostUntil = now + 1100; sfx('correct'); setFlash('ok'); setNitro(true); setTimeout(() => setNitro(false), 1100); ctx.say(pickOk(), 'cheer'); }
-        else { s.slowUntil = now + 900; sfx('wrong'); setFlash('no'); ctx.say(`Itu ${chosen.toUpperCase()}. Kita cari ${g.target.toUpperCase()}!`, 'thinking', true); }
+        else { s.slowUntil = now + 900; sfx('wrong'); setFlash('no'); ctx.say(`Itu ${chosen.toUpperCase()}. Kita cari ${g.target.toUpperCase()}!`, 'thinking'); speak(`Itu huruf ${letterName(chosen)}. Kita cari huruf ${letterName(g.target)}!`); }
         setTimeout(() => setFlash(null), 700);
       }
       // papan lepas → papan seterusnya

@@ -7,8 +7,10 @@ import '@fontsource/baloo-2/800.css';
 import './styles/global.css';
 import App from './App';
 import { requestPersistence } from './storage/storage';
+import { loadAudioManifest } from './audio/audio';
 
 requestPersistence();
+void loadAudioManifest();
 
 // Cangkuk ujian automatik (hanya aktif dengan ?ujian dalam URL) — tidak menjejaskan pengguna.
 if (new URLSearchParams(location.search).has('ujian')) {
