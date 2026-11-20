@@ -1,5 +1,5 @@
 /* Service worker CILUKA — offline-first. Naikkan VERSION setiap kali fail berubah. */
-const VERSION = 'ciluka-v0.1.0';
+const VERSION = 'ciluka-v0.1.1';
 const ASSETS = [
   './', 'index.html', 'styles.css', 'manifest.webmanifest', 'icons/icon.svg',
   'js/pip.js', 'js/data.js', 'js/audio.js', 'js/store.js', 'js/kompas.js',

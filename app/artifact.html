@@ -1,0 +1,80 @@
+<title>CILUKA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+  <div id="app">
+
+    <!-- ===================== LAMAN PIP (HOME) ===================== -->
+    <section id="home" class="screen active" aria-label="Laman Pip">
+      <div class="sky">
+        <div class="sun"></div>
+        <div class="stars"></div>
+        <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+        <div class="horizon">
+          <button class="island open" data-island="kampung" aria-label="Kampung Huruf"><span class="isl-top">🏘️</span></button>
+          <button class="island open small" data-island="studio" aria-label="Studio Calit Comot"><span class="isl-top">🎨</span></button>
+          <div class="island locked" aria-label="Pulau berkunci"><span class="mist"></span></div>
+          <div class="island locked small" aria-label="Pulau berkunci"><span class="mist"></span></div>
+        </div>
+      </div>
+
+      <div class="logo" aria-hidden="true">CILUK<span>A</span></div>
+
+      <div class="balloons" id="balloons"></div>
+
+      <div class="pip-stage">
+        <div class="bubble" id="homeBubble"></div>
+        <div class="pip-holder" id="homePip"></div>
+        <div class="nest" aria-hidden="true"></div>
+      </div>
+
+      <div class="laman" id="laman" aria-label="Benda yang kamu eja"></div>
+
+      <button class="corner-btn profile" id="garden" aria-label="Kebun Rajin">🌱<span id="gardenCount">0</span></button>
+      <button class="corner-btn lock" id="parentLock" aria-label="Ruang ibu bapa — sentuh dan tahan">🔒<i class="hold-ring"></i></button>
+    </section>
+
+    <!-- ===================== PERMAINAN ===================== -->
+    <section id="game" class="screen" aria-label="Permainan">
+      <header class="game-top">
+        <button class="round-btn" id="backBtn" aria-label="Balik ke Laman Pip">🏠</button>
+        <div class="prompt" id="prompt"></div>
+        <div class="progress" id="progress"></div>
+      </header>
+      <div class="game-body" id="gameBody"></div>
+      <div class="game-pip" id="gamePip"></div>
+    </section>
+
+    <!-- ===================== REHAT ===================== -->
+    <section id="rest" class="screen" aria-label="Rehat">
+      <div class="night"></div>
+      <div class="rest-pip" id="restPip"></div>
+      <h2 class="rest-title">Hebat hari ini!</h2>
+      <p class="rest-sub">Jom berehat. Esok kita sambung pengembaraan lagi!</p>
+      <div class="rest-mission" id="restMission"></div>
+      <button class="hold-btn" id="restContinue">Ibu/Ayah: sentuh &amp; tahan untuk sambung<i class="hold-bar"></i></button>
+    </section>
+
+    <!-- ===================== RUANG IBU BAPA ===================== -->
+    <section id="parent" class="screen parent" aria-label="Ruang Ibu Bapa">
+      <header class="p-head">
+        <h1>Ruang Ibu Bapa</h1>
+        <button class="p-close" id="parentClose" aria-label="Tutup">✕</button>
+      </header>
+      <div class="p-body" id="parentBody"></div>
+    </section>
+
+    <div id="fx" aria-hidden="true"></div>
+  </div>
+
+  <script src="js/pip.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/kompas.js"></script>
+  <script src="js/games/ciluk.js"></script>
+  <script src="js/games/tulis.js"></script>
+  <script src="js/games/sarang.js"></script>
+  <script src="js/parent.js"></script>
+  <script src="js/app.js"></script>

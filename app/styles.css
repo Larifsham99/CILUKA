@@ -279,3 +279,12 @@ button { font-family: inherit; color: inherit; border: 0; background: none; curs
 .reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { animation-iteration-count: 1 !important; }
 .spot.hint .cover { animation: wiggle 1s ease-in-out infinite; }
 .weave.done .slots, .weave.done .egg { opacity: 0; transition: opacity .4s; }
+
+/* Pintu ibu bapa */
+.gate { position: absolute; inset: 0; z-index: 60; background: rgba(29, 22, 48, .55); display: grid; place-items: center; padding: 16px; }
+.gate-card { width: min(340px, 100%); background: var(--cream); border-radius: 20px; padding: 18px; display: grid; gap: 12px; font-family: "Nunito", system-ui, sans-serif; font-size: 16px; box-shadow: var(--shadow); }
+.gate-card input { font: inherit; font-size: 22px; padding: 10px 12px; border-radius: 12px; border: 1px solid #ddd; background: #fff; color: var(--ink); }
+.gate-row { display: flex; gap: 10px; justify-content: flex-end; }
+.p-btn.go { background: var(--sun); }
+.gate-err { margin: 0; color: #a12a2a; font-size: 14px; }
+.p-btn:focus-visible, .round-btn:focus-visible, .balloon:focus-visible, .spot:focus-visible, .tile:focus-visible { outline: 3px solid var(--purple); outline-offset: 3px; }

@@ -257,8 +257,21 @@
   }
   holdButton($('#parentLock'), () => {
     const a = 3 + Math.floor(Math.random() * 6), b = 4 + Math.floor(Math.random() * 5);
-    const ans = prompt(`Untuk ibu bapa: berapakah ${a} + ${b}?`);
-    if (ans !== null && +ans === a + b) { Parent.render($('#parentBody')); show('parent'); }
+    const g = document.createElement('div');
+    g.className = 'gate';
+    g.innerHTML = `<form class="gate-card"><label for="gateAns">Untuk ibu bapa: berapakah ${a} + ${b}?</label>
+      <input id="gateAns" type="number" inputmode="numeric" autocomplete="off">
+      <div class="gate-row"><button type="button" class="p-btn" data-x>Batal</button><button class="p-btn go">Masuk</button></div>
+      <p class="gate-err" hidden>Jawapan belum betul. Cuba lagi.</p></form>`;
+    $('#app').appendChild(g);
+    const f = g.querySelector('form'), inp = g.querySelector('input');
+    setTimeout(() => inp.focus(), 50);
+    g.querySelector('[data-x]').onclick = () => g.remove();
+    f.onsubmit = e => {
+      e.preventDefault();
+      if (+inp.value === a + b) { g.remove(); Parent.render($('#parentBody')); show('parent'); }
+      else { g.querySelector('.gate-err').hidden = false; inp.value = ''; }
+    };
   });
   $('#parentClose').onclick = () => goHome();
 

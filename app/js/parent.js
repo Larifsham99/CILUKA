@@ -77,10 +77,13 @@
     };
     el.querySelector('#pImport').onchange = e => {
       const f = e.target.files[0]; if (!f) return;
-      f.text().then(t => { try { Store.importData(t); alert('Sandaran dipulihkan!'); location.reload(); } catch (err) { alert('Fail sandaran tidak sah.'); } });
+      f.text().then(t => { try { Store.importData(t); location.reload(); } catch (err) { e.target.closest('.card').querySelector('.p-note').textContent = 'Fail sandaran tidak sah. Pilih fail .json yang disimpan daripada CILUKA.'; } });
     };
-    el.querySelector('#pReset').onclick = () => {
-      if (confirm('Padam semua kemajuan, tulisan dan perkataan? Tindakan ini tidak boleh dibatalkan.')) { Store.reset(); location.reload(); }
+    el.querySelector('#pReset').onclick = e => {
+      const b = e.currentTarget;
+      if (b.dataset.sure) { Store.reset(); location.reload(); return; }
+      b.dataset.sure = '1'; b.textContent = 'Tekan sekali lagi untuk padam semua';
+      setTimeout(() => { delete b.dataset.sure; b.textContent = 'Padam semua kemajuan'; }, 4000);
     };
     el.querySelectorAll('[data-replay]').forEach(b => b.onclick = () => {
       const path = b.closest('.writing').querySelector('path');
