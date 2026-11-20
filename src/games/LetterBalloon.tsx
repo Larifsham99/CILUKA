@@ -34,7 +34,7 @@ export default function LetterBalloon({ level, ctx }: GameProps) {
   };
 
   useEffect(() => {
-    setBalloons([make(true, 0), make(false, 1.2), make(true, 2.4), make(false, 3.6), make(undefined, 4.8)]);
+    setBalloons([make(true, -cfg.speed * 0.55), make(false, -cfg.speed * 0.4), make(true, -cfg.speed * 0.25), make(false, -cfg.speed * 0.1), make(undefined, 0.6)]);
     const ask = () => speak(`Pecahkan belon huruf ${letterName(target)}!`);
     ctx.setRepeat(ask); ask(); ctx.question();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps

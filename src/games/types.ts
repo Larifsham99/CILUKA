@@ -9,6 +9,8 @@ export interface GameCtx {
   pool: string[];
   /** Perkataan misi harian (jika dari misi). */
   missionWord?: string;
+  /** Suara arahan tersedia (jika tidak, petunjuk visual sentiasa dipaparkan). */
+  voiceOn: boolean;
   /** Rekod jawapan: mengemas kini penguasaan, kiraan dan reaksi Pip. */
   answer: (key: string, correct: boolean, opts?: { chosen?: string; hinted?: boolean; quiet?: boolean }) => void;
   /** Tandakan soalan baharu dipaparkan (untuk kiraan masa menjawab). */

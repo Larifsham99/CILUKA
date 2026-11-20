@@ -16,9 +16,8 @@ const GAMES = ['letter-hunt', 'letter-match', 'letter-balloon', 'memory-letter',
     const before = errs.length;
     await p.goto(`${BASE}?ujian#/main/${g}?tahap=${l}`);
     await p.reload();
-    await p.waitForSelector('.play-btn');
+    await p.waitForSelector('.game-title');
     const shown = await p.$eval('.game-title span', e => e.textContent);
-    await p.click('.play-btn');
     await p.waitForTimeout(900);
     // beberapa ketikan rawak pada pilihan
     for (let k = 0; k < 4; k++) {

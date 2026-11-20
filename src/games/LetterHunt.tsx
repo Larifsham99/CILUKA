@@ -52,10 +52,12 @@ export default function LetterHunt({ level, ctx }: GameProps) {
 
   return (
     <div className="g-hunt">
-      <div className="g-ask">
-        <span>Cari huruf</span>
-        <span className="glyph glyph-xl ask-letter">{show(target, upper)}</span>
-      </div>
+      {level < 3 || !ctx.voiceOn
+        ? <div className="g-ask"><span>Cari huruf</span><span className="glyph glyph-xl ask-letter">{show(target, upper)}</span></div>
+        : <button className="g-ask listen" onClick={() => speak(`Cari huruf ${letterName(target)}!`)} aria-label="Dengar huruf semula">
+            <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" /><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" /></svg>
+            <span>Dengar &amp; cari</span>
+          </button>}
       <div className={`letter-grid n${cfg.options}`}>
         {options.map(l => {
           const isT = l === target;

@@ -28,19 +28,20 @@ export default function LetterMatch({ level, ctx }: GameProps) {
   const [bad, setBad] = useState<string | null>(null);
 
   useEffect(() => {
-    setDone([]); setSel(null);
-    const ask = () => speak('Tekan huruf besar, kemudian cari huruf kecil yang sama.');
+    setDone([]); setSel(null); setSide(null);
+    const ask = () => speak('Padankan huruf besar dengan huruf kecil yang sama.');
     ctx.setRepeat(ask); ask(); ctx.question();
   }, [set]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { ctx.progress(set * n + done.length, n * sets); }, [done, set]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const pickBig = (l: string) => { if (done.includes(l)) return; setSel(l); sfx('tap'); sayLetter(l); };
-  const pickSmall = (l: string) => {
+  // Anak boleh mula dari huruf besar ATAU huruf kecil.
+  const [side, setSide] = useState<'big' | 'small' | null>(null);
+  const pick = (l: string, from: 'big' | 'small') => {
     if (done.includes(l)) return;
-    if (!sel) { setBad(l); setTimeout(() => setBad(null), 500); ctx.say('Tekan huruf besar dahulu!', 'thinking'); return; }
+    if (!sel || side === from) { setSel(l); setSide(from); sfx('tap'); sayLetter(l); return; }
     if (l === sel) {
       const nd = [...done, l];
-      setDone(nd); setSel(null);
+      setDone(nd); setSel(null); setSide(null);
       ctx.answer('L:' + l, true);
       if (nd.length === n) setTimeout(() => { if (set + 1 >= sets) ctx.finish(); else setSet(s => s + 1); }, 900);
       else ctx.question();
@@ -55,14 +56,14 @@ export default function LetterMatch({ level, ctx }: GameProps) {
       <div className="match-cols">
         <div className="match-col">
           {letters.map(l => (
-            <button key={l} className={`match-card big ${sel === l ? 'sel' : ''} ${done.includes(l) ? 'done' : ''}`} onClick={() => pickBig(l)} aria-label={`Huruf besar ${l}`}>
+            <button key={l} className={`match-card big ${sel === l && side === 'big' ? 'sel' : ''} ${done.includes(l) ? 'done' : ''} ${bad === l && side === 'small' ? 'shake' : ''}`} onClick={() => pick(l, 'big')} aria-label={`Huruf besar ${l}`}>
               <span className="glyph">{l.toUpperCase()}</span>
             </button>
           ))}
         </div>
         <div className="match-col">
           {right.map(l => (
-            <button key={l} className={`match-card small ${done.includes(l) ? 'done' : ''} ${bad === l ? 'shake' : ''}`} onClick={() => pickSmall(l)} aria-label={`Huruf kecil ${l}`}>
+            <button key={l} className={`match-card small ${sel === l && side === 'small' ? 'sel' : ''} ${done.includes(l) ? 'done' : ''} ${bad === l && side === 'big' ? 'shake' : ''}`} onClick={() => pick(l, 'small')} aria-label={`Huruf kecil ${l}`}>
               <span className="glyph">{l}</span>
             </button>
           ))}

@@ -68,7 +68,9 @@ export function completeGame(d: ProfileData, game: GameId, level: number, r: Gam
   day.games++; day.ms += ms; day.correct += r.correct; day.wrong += r.wrong;
 
   let missionStep = false, missionAllDone = false;
-  if (fromMission) ({ stepDone: missionStep, allDone: missionAllDone } = markMissionStep(d, game));
+  // Langkah misi dikira walaupun anak masuk dari peta (bukan hanya dari butang misi).
+  void fromMission;
+  ({ stepDone: missionStep, allDone: missionAllDone } = markMissionStep(d, game));
 
   const { badges: newBadges, accessories: newAccessories } = evaluateAwards(d, game, level, stars);
   return {

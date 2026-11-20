@@ -22,9 +22,8 @@ const jsClick = (page, sel) => page.$eval(sel, e => e.click()).then(() => true).
 
 async function playGame(page, id) {
   await page.goto(BASE + '?ujian#/main/' + id + '?tahap=1');
-  await page.waitForSelector('.intro-card');
-  await page.click('.play-btn');
-  await page.waitForTimeout(500);
+  await page.waitForSelector('.game-body > *');
+  await page.waitForTimeout(600);
   const t0 = Date.now();
   while (Date.now() - t0 < 120000) {
     if (await page.$('.result-card')) break;
@@ -148,10 +147,20 @@ async function playGame(page, id) {
   ok('Profil dicipta dan peta dunia dipaparkan', await page.$eval('.me-text strong', e => e.textContent) === 'Aisyah');
   ok('9 pulau dipaparkan', (await page.$$('.island')).length === 9);
   ok('Pulau berkunci mempunyai keadaan kunci', (await page.$$('.island.locked')).length >= 4);
+  await page.click('.island[aria-label^="Litar Lumba"]', { force: true });
+  await page.waitForSelector('.race-scene');
+  ok('Pulau satu permainan terus membuka permainan (tanpa skrin tambahan)', page.url().includes('main/letter-race'));
+  await page.click('.game-title');
+  ok('Pemilih tahap dibuka dari tajuk permainan', !!(await page.waitForSelector('.modal .level-chip', { timeout: 3000 }).catch(() => null)));
+  await page.click('.modal-x');
+  await page.goto(BASE + '?ujian#/');
+  await page.waitForSelector('.parent-lock');
+  await page.click('.parent-lock');
+  ok('Ketikan pendek pada kunci memberi petunjuk ibu bapa', (await page.textContent('.pip-bubble').catch(() => '')).includes('tahan'));
 
   // 2. Misi harian dari peta
   await page.click('.mission-play');
-  await page.waitForSelector('.intro-card');
+  await page.waitForSelector('.game-screen .game-body > *');
   ok('Butang Main misi membuka permainan misi', page.url().includes('misi=1'));
 
   // 3. Pintu ibu bapa + buka semua (untuk menguji setiap permainan)
@@ -230,7 +239,7 @@ async function playGame(page, id) {
   await page.reload().catch(() => null);
   const offlineOk = await page.waitForSelector('.home .island', { timeout: 8000 }).then(() => true).catch(() => false);
   ok('Aplikasi dibuka tanpa internet (service worker)', swReady && offlineOk);
-  if (offlineOk) { await page.goto(BASE + '?ujian#/main/letter-hunt?tahap=1').catch(() => null); ok('Permainan dibuka tanpa internet', await page.waitForSelector('.intro-card', { timeout: 8000 }).then(() => true).catch(() => false)); }
+  if (offlineOk) { await page.goto(BASE + '?ujian#/main/letter-hunt?tahap=1').catch(() => null); ok('Permainan dibuka tanpa internet', await page.waitForSelector('.letter-bubble', { timeout: 8000 }).then(() => true).catch(() => false)); }
   await ctx.setOffline(false);
 
   // 11. Susun atur responsif

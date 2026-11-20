@@ -68,15 +68,16 @@ export function ParentGate({ open, onPass, onClose, reason }: { open: boolean; o
 function newQ() { return { a: 6 + Math.floor(Math.random() * 9), b: 5 + Math.floor(Math.random() * 9) }; }
 
 /** Butang sentuh-dan-tahan (untuk tindakan ibu bapa). */
-export function HoldButton({ children, onHold, label, className = '', ms = 1500 }: { children: ReactNode; onHold: () => void; label: string; className?: string; ms?: number }) {
+export function HoldButton({ children, onHold, onTap, label, className = '', ms = 1500 }: { children: ReactNode; onHold: () => void; onTap?: () => void; label: string; className?: string; ms?: number }) {
   const [holding, setHolding] = useState(false);
   const t = useRef<number>();
-  const start = () => { setHolding(true); t.current = window.setTimeout(() => { setHolding(false); onHold(); }, ms); };
-  const stop = () => { setHolding(false); clearTimeout(t.current); };
+  const t0 = useRef(0);
+  const start = () => { t0.current = Date.now(); setHolding(true); t.current = window.setTimeout(() => { t0.current = 0; setHolding(false); onHold(); }, ms); };
+  const stop = () => { if (t0.current && Date.now() - t0.current < ms * 0.6) onTap?.(); t0.current = 0; setHolding(false); clearTimeout(t.current); };
   return (
     <button type="button" aria-label={label} title={label} className={`hold-btn ${holding ? 'holding' : ''} ${className}`}
       style={{ ['--hold' as string]: ms + 'ms' }}
-      onPointerDown={start} onPointerUp={stop} onPointerLeave={stop} onPointerCancel={stop}
+      onPointerDown={start} onPointerUp={stop} onPointerLeave={() => { t0.current = 0; stop(); }} onPointerCancel={() => { t0.current = 0; stop(); }}
       onContextMenu={e => e.preventDefault()}
       onKeyDown={e => { if (e.key === 'Enter') onHold(); }}>
       {children}<i className="hold-ring" />

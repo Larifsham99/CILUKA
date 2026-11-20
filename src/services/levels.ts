@@ -18,7 +18,7 @@ export function levelUnlock(d: ProfileData, game: GameId, lvl: number, s?: Setti
   if (prev.plays === 0) return { unlocked: false, reason: `Siapkan Tahap ${lvl - 1} dahulu` };
   if (prev.bestStars < 2) return { unlocked: false, reason: `Dapatkan 2 bintang di Tahap ${lvl - 1}` };
   const acc = prev.attempts ? prev.correct / prev.attempts : 0;
-  if (prev.attempts < 5 || acc < 0.6) return { unlocked: false, reason: `Berlatih lagi di Tahap ${lvl - 1}` };
+  if ((prev.attempts < 4 && prev.plays < 2) || acc < 0.6) return { unlocked: false, reason: `Berlatih lagi di Tahap ${lvl - 1}` };
   return { unlocked: true, reason: '' };
 }
 

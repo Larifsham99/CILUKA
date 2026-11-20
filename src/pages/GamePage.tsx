@@ -1,25 +1,25 @@
 /** Rangka permainan: Mula → Main (betul/salah) → Selesai → Cuba lagi. Menyambungkan permainan kepada enjin pembelajaran dan ganjaran. */
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { sfx, speak, stopSpeech, unlockAudio } from '../audio/audio';
+import { sfx, speak, stopSpeech, unlockAudio, voiceAvailable } from '../audio/audio';
 import { PipGuide } from '../components/PipGuide';
 import { BadgeIcon } from '../components/BadgeIcon';
-import { Btn, Confetti, IconBtn, ProgressDots, StarIcon, Stars } from '../components/ui';
+import { Btn, Confetti, IconBtn, Modal, ProgressDots, StarIcon, Stars } from '../components/ui';
 import { LINES, pick } from '../data/dialog';
 import type { GameId, GameResult, PipMood } from '../data/types';
-import { GAMES, LEVEL_NAMES } from '../data/worlds';
+import { GAMES, LEVEL_NAMES, WORLD_MAP } from '../data/worlds';
 import { GAME_COMPONENTS } from '../games/registry';
 import type { GameCtx } from '../games/types';
 import { store, useStore } from '../hooks/useStore';
 import { focusLetters, introducedLetters, recordAnswer } from '../services/learning';
 import { levelRecord, levelUnlock, MAX_LEVEL, recommendedLevel } from '../services/levels';
-import { nextMissionStep } from '../services/missions';
+import { chestAvailable, nextMissionStep } from '../services/missions';
 import { badgeInfo, completeGame, type CompletionReport } from '../services/rewards';
 import { go } from '../utils/router';
 
-type Phase = 'intro' | 'playing' | 'done';
+type Phase = 'playing' | 'done';
 
 export function GamePage({ id, level: askedLevel, mission }: { id: GameId; level?: number; mission: boolean }) {
-  const { data, profile, index } = useStore();
+  const { data, profile, index, resting } = useStore();
   const info = GAMES[id];
   const Game = GAME_COMPONENTS[id];
   const initialLevel = useMemo(() => {
@@ -28,21 +28,27 @@ export function GamePage({ id, level: askedLevel, mission }: { id: GameId; level
     return recommendedLevel(data, id, index.settings);
   }, [id, askedLevel]); // eslint-disable-line react-hooks/exhaustive-deps
   const [level, setLevel] = useState(initialLevel);
-  const [phase, setPhase] = useState<Phase>('intro');
-  const [playId, setPlayId] = useState(0);
-  const [mood, setMood] = useState<PipMood>('idle');
+  const [phase, setPhase] = useState<Phase>('playing');
+  const [playId, setPlayId] = useState(1);
+  const [mood, setMood] = useState<PipMood>('excited');
   const [line, setLine] = useState(info.how);
   const [prog, setProg] = useState({ done: 0, total: 1 });
   const [report, setReport] = useState<CompletionReport | null>(null);
   const [confetti, setConfetti] = useState(0);
+  const [picker, setPicker] = useState(false);
   const tally = useRef<GameResult>({ correct: 0, wrong: 0, hints: 0 });
-  const startedAt = useRef(0);
-  const qAt = useRef(0);
+  const startedAt = useRef(Date.now());
+  const qAt = useRef(Date.now());
   const repeatFn = useRef<(() => void) | null>(null);
   const moodT = useRef<number>();
+  const phaseRef = useRef<Phase>('playing');
+  phaseRef.current = phase;
 
-  useEffect(() => { setLevel(initialLevel); setPhase('intro'); setLine(info.how); }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => () => { stopSpeech(); clearTimeout(moodT.current); }, []);
+  // Masa main yang dihentikan separuh jalan tetap dikira dalam had sesi.
+  useEffect(() => () => {
+    stopSpeech(); clearTimeout(moodT.current);
+    if (phaseRef.current === 'playing') store.addSessionTime(Date.now() - startedAt.current);
+  }, []);
 
   const react = useCallback((m: PipMood, text?: string, ms = 1600) => {
     setMood(m); if (text) setLine(text);
@@ -54,6 +60,7 @@ export function GamePage({ id, level: askedLevel, mission }: { id: GameId; level
     if (!profile) return;
     const ms = Date.now() - startedAt.current;
     const rep = store.update(d => completeGame(d, id, level, tally.current, ms, mission))!;
+    phaseRef.current = 'done';
     store.addSessionTime(ms);
     setReport(rep);
     setPhase('done');
@@ -68,9 +75,10 @@ export function GamePage({ id, level: askedLevel, mission }: { id: GameId; level
     if (!data || !profile) return null;
     const pool = introducedLetters(data, profile.age);
     let focus = focusLetters(data, profile.age, 6);
-    if (mission && data.daily) focus = [data.daily.focus, ...focus.filter(l => l !== data.daily!.focus)];
+    if (data.daily && (mission || data.daily.steps.some(s => s.game === id && !s.done))) focus = [data.daily.focus, ...focus.filter(l => l !== data.daily!.focus)];
     return {
-      data, age: profile.age, focus, pool, missionWord: mission ? data.daily?.word : undefined,
+      data, age: profile.age, focus, pool, missionWord: data.daily?.word,
+      voiceOn: index.settings.voice && voiceAvailable(),
       answer: (key, correct, o = {}) => {
         const ms = Date.now() - qAt.current;
         if (correct) tally.current.correct++; else tally.current.wrong++;
@@ -97,13 +105,16 @@ export function GamePage({ id, level: askedLevel, mission }: { id: GameId; level
 
   if (!data || !profile || !ctx) return null;
 
+  /** Mula terus — tiada skrin "Mula" tambahan. */
   const start = (lvl = level) => {
     unlockAudio();
+    if (phaseRef.current === 'playing') store.addSessionTime(Date.now() - startedAt.current);
     setLevel(lvl);
     tally.current = { correct: 0, wrong: 0, hints: 0 };
     startedAt.current = Date.now(); qAt.current = Date.now();
     setProg({ done: 0, total: 1 });
     setReport(null);
+    setPicker(false);
     setPlayId(p => p + 1);
     setPhase('playing');
     react('excited', info.how, 2500);
@@ -111,15 +122,26 @@ export function GamePage({ id, level: askedLevel, mission }: { id: GameId; level
 
   const next = nextMissionStep(data);
   const lvlUnlocked = (l: number) => levelUnlock(data, id, l, index.settings);
+  const backTo = !mission && WORLD_MAP[info.world].games.length > 1 ? 'dunia/' + info.world : '';
+
+  // Satu butang utama yang jelas selepas permainan.
+  const primary = (() => {
+    if (!report) return null;
+    if (resting) return { label: 'Jom Rehat', variant: 'purple' as const, run: () => go('') };
+    if (report.missionAllDone && chestAvailable(data)) return { label: 'Buka Peti Misteri!', variant: 'purple' as const, run: () => go('koleksi?peti=1') };
+    if (next && (mission || report.missionStep)) return { label: 'Misi Seterusnya', variant: 'sun' as const, run: () => go(`main/${next.game}?tahap=${next.level}&misi=1`) };
+    if (level < MAX_LEVEL && lvlUnlocked(level + 1).unlocked && report.stars >= 2) return { label: `Tahap ${level + 1}`, variant: 'sun' as const, run: () => start(level + 1) };
+    return { label: 'Main Lagi', variant: 'sun' as const, run: () => start(level) };
+  })();
 
   return (
     <div className="screen game-screen" style={{ ['--g' as string]: info.color }}>
       <header className="game-head">
-        <IconBtn label="Kembali ke peta" onClick={() => go(mission ? '' : 'dunia/' + info.world)}><HomeIcon /></IconBtn>
-        <div className="game-title">
+        <IconBtn label="Kembali ke peta" onClick={() => go(backTo)}><HomeIcon /></IconBtn>
+        <button className="game-title" onClick={() => { sfx('tap'); setPicker(true); }} aria-label={`Tahap ${level}. Tekan untuk tukar tahap.`}>
           <strong>{info.name}</strong>
-          <span>Tahap {level} · {LEVEL_NAMES[level - 1]}</span>
-        </div>
+          <span className="level-pill">Tahap {level} · {LEVEL_NAMES[level - 1]} <i aria-hidden="true">▾</i></span>
+        </button>
         {phase === 'playing'
           ? <IconBtn label="Dengar semula" className="icon-sun" onClick={() => repeatFn.current?.()}><SpeakerIcon /></IconBtn>
           : <span className="icon-spacer" />}
@@ -127,38 +149,15 @@ export function GamePage({ id, level: askedLevel, mission }: { id: GameId; level
       {phase === 'playing' && <ProgressDots done={prog.done} total={prog.total} />}
 
       <main className="game-body">
-        {phase === 'intro' && (
-          <div className="intro-card">
-            <div className="intro-badge" style={{ background: info.color }}><GameGlyph id={id} /></div>
-            <h1>{info.name}</h1>
-            <p className="intro-how">{info.how}</p>
-            <div className="level-chips" role="group" aria-label="Pilih tahap">
-              {Array.from({ length: MAX_LEVEL }, (_, k) => k + 1).map(l => {
-                const u = lvlUnlocked(l);
-                const rec = levelRecord(data, id, l);
-                return (
-                  <button key={l} className={`level-chip ${l === level ? 'on' : ''} ${u.unlocked ? '' : 'locked'}`} disabled={!u.unlocked}
-                    onClick={() => { sfx('tap'); setLevel(l); }} aria-label={u.unlocked ? `Tahap ${l}` : `Tahap ${l} berkunci. ${u.reason}`}>
-                    <b>{u.unlocked ? l : <LockIcon />}</b>
-                    <Stars n={rec.bestStars} size={11} />
-                  </button>
-                );
-              })}
-            </div>
-            {!lvlUnlocked(Math.min(5, level + 1)).unlocked && level < 5 && <p className="intro-note">{lvlUnlocked(level + 1).reason} untuk buka Tahap {level + 1}.</p>}
-            <Btn size="xl" variant="sun" onClick={() => start()} className="play-btn"><PlayIcon /> Mula</Btn>
-          </div>
-        )}
-
         {phase === 'playing' && (
           <Suspense fallback={<div className="loading-inline">Memuatkan…</div>}>
             <Game key={playId} level={level} ctx={ctx} />
           </Suspense>
         )}
 
-        {phase === 'done' && report && (
+        {phase === 'done' && report && primary && (
           <div className="result-card">
-            <h1>Hebat!</h1>
+            <h1>{report.stars === 3 ? 'Hebat!' : report.stars === 2 ? 'Bagus!' : 'Siap!'}</h1>
             <div className="result-stars"><Stars n={report.stars} size={54} /></div>
             <div className="result-chips">
               <span className="chip chip-xp">+{report.xpGained} XP</span>
@@ -171,19 +170,37 @@ export function GamePage({ id, level: askedLevel, mission }: { id: GameId; level
                 {report.newBadges.map(b => { const bi = badgeInfo(b); return <div key={b} className="result-badge pop-in"><BadgeIcon icon={bi.icon} color={bi.color} size={54} /><span>{bi.name}</span></div>; })}
               </div>
             )}
-            {report.missionAllDone && <p className="result-unlock">Misi hari ini siap! Peti Misteri sedia dibuka.</p>}
+            {report.missionAllDone && <p className="result-unlock">Misi hari ini siap!</p>}
+            {resting && <p className="result-note">Masa bermain hari ini sudah cukup.</p>}
             <div className="result-actions">
-              {mission && report.missionAllDone && <Btn size="lg" variant="purple" onClick={() => go('koleksi?peti=1')}>Buka Peti Misteri</Btn>}
-              {mission && !report.missionAllDone && next && <Btn size="lg" variant="sun" onClick={() => go(`main/${next.game}?tahap=${next.level}&misi=1`)}>Misi Seterusnya</Btn>}
-              {!mission && report.nextLevelUnlocked && <Btn size="lg" variant="sun" onClick={() => start(level + 1)}>Tahap {level + 1}</Btn>}
-              <Btn size="lg" variant={mission || report.nextLevelUnlocked ? 'white' : 'sun'} onClick={() => start(level)}>Main Lagi</Btn>
-              <Btn size="md" variant="ghost" onClick={() => go(mission ? '' : 'dunia/' + info.world)}>Ke Peta</Btn>
+              <Btn size="xl" variant={primary.variant} onClick={primary.run} className="next-btn">{primary.label} <PlayIcon /></Btn>
+              {!resting && <div className="result-small">
+                {primary.label !== 'Main Lagi' && <Btn size="md" variant="white" onClick={() => start(level)}>Main Lagi</Btn>}
+                <Btn size="md" variant="white" onClick={() => go(backTo)}><HomeIcon /> Peta</Btn>
+              </div>}
             </div>
           </div>
         )}
       </main>
       <PipGuide mood={mood} text={line} className="game-pip" onPip={() => react('happy', pick(LINES.tickle))} />
       <Confetti run={confetti} />
+
+      <Modal open={picker} onClose={() => setPicker(false)} title="Pilih Tahap">
+        <div className="level-chips" role="group" aria-label="Pilih tahap">
+          {Array.from({ length: MAX_LEVEL }, (_, k) => k + 1).map(l => {
+            const u = lvlUnlocked(l);
+            const rec = levelRecord(data, id, l);
+            return (
+              <button key={l} className={`level-chip ${l === level ? 'on' : ''} ${u.unlocked ? '' : 'locked'}`} disabled={!u.unlocked}
+                onClick={() => { sfx('tap'); start(l); }} aria-label={u.unlocked ? `Tahap ${l}` : `Tahap ${l} berkunci. ${u.reason}`}>
+                <b>{u.unlocked ? l : <LockIcon />}</b>
+                <Stars n={rec.bestStars} size={11} />
+              </button>
+            );
+          })}
+        </div>
+        {level < MAX_LEVEL && !lvlUnlocked(level + 1).unlocked && <p className="intro-note">{lvlUnlocked(level + 1).reason} untuk buka Tahap {level + 1}.</p>}
+      </Modal>
     </div>
   );
 }

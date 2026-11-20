@@ -11,7 +11,7 @@ export interface GameInfo {
 
 export const GAMES: Record<GameId, GameInfo> = {
   'letter-hunt': { id: 'letter-hunt', name: 'Cari Huruf', how: 'Dengar nama huruf, kemudian tekan huruf yang betul.', skill: 'Mengenal huruf', world: 'letter-land', color: '#FF7EB6' },
-  'letter-match': { id: 'letter-match', name: 'Padan Huruf', how: 'Tekan huruf besar, kemudian tekan huruf kecil yang sama.', skill: 'Huruf besar & kecil', world: 'letter-land', color: '#9B6BFF' },
+  'letter-match': { id: 'letter-match', name: 'Padan Huruf', how: 'Tekan satu huruf, kemudian pasangannya (besar ↔ kecil).', skill: 'Huruf besar & kecil', world: 'letter-land', color: '#9B6BFF' },
   'letter-balloon': { id: 'letter-balloon', name: 'Belon Huruf', how: 'Pecahkan belon yang ada huruf yang Pip sebut.', skill: 'Mengenal huruf dengan pantas', world: 'letter-land', color: '#FFC93C' },
   'magic-tracing': { id: 'magic-tracing', name: 'Tulis Ajaib', how: 'Letak jari di titik ungu, kemudian ikut laluan.', skill: 'Menulis', world: 'scribble-valley', color: '#FF9F6B' },
   'sound-hunt': { id: 'sound-hunt', name: 'Cari Bunyi', how: 'Dengar bunyi, kemudian tekan huruf yang sepadan.', skill: 'Bunyi huruf', world: 'sound-forest', color: '#2EC4B6' },

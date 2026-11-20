@@ -45,7 +45,8 @@ export function HomePage() {
     const greet = first ? LINES.welcomeFirst[0] : back ? LINES.welcomeBack[0] : sky === 'night' ? LINES.welcomeNight[0] : pick(hour < 12 ? LINES.welcomeMorning : LINES.welcomeDay);
     setLine(greet + ' ' + missionText);
     const t = setTimeout(() => setMood('idle'), 2500);
-    return () => clearTimeout(t);
+    const t2 = setTimeout(() => setLine(''), 9000);
+    return () => { clearTimeout(t); clearTimeout(t2); };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!data || !profile) return null;
@@ -71,7 +72,8 @@ export function HomePage() {
       return;
     }
     sfx('unlock');
-    go('dunia/' + id);
+    const w = WORLDS.find(x => x.id === id)!;
+    if (w.games.length === 1) go(`main/${w.games[0]}`); else go('dunia/' + id);
   };
 
   return (
@@ -86,7 +88,7 @@ export function HomePage() {
         <button className="collection-btn" onClick={() => go('koleksi')} aria-label="Koleksi ganjaran">
           <ChestIcon size={34} />{chest && <b>!</b>}
         </button>
-        <HoldButton label="Ruang ibu bapa (sentuh dan tahan)" className="parent-lock" onHold={() => setGate(true)}><LockIcon /></HoldButton>
+        <HoldButton label="Ruang ibu bapa (sentuh dan tahan)" className="parent-lock" onHold={() => setGate(true)} onTap={() => { setMood('thinking'); setLine('Ibu bapa: tekan dan tahan kunci ini selama 2 saat.'); }}><LockIcon /></HoldButton>
       </header>
 
       <div className="map-scroll">
@@ -130,7 +132,7 @@ export function HomePage() {
             ))}
           </div>
           </div>
-          <Btn size="lg" variant={chest ? 'purple' : done ? 'lime' : 'sun'} className="mission-play" onClick={playMission}>
+          <Btn size="lg" variant={chest ? 'purple' : done ? 'lime' : 'sun'} className={`mission-play ${data.activity.length === 0 ? 'first-hint' : ''}`} onClick={playMission}>
             {chest ? <><ChestIcon /> Buka Peti</> : done ? 'Siap!' : <><PlayIcon /> Main</>}
           </Btn>
         </div>
