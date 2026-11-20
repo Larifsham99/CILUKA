@@ -19,8 +19,8 @@ import { GameGlyph, LockIcon, PlayIcon } from './GamePage';
 
 /** Kedudukan pulau di peta (peratus) — laluan berliku dari atas ke bawah. */
 const POS: Record<WorldId, [number, number]> = {
-  'letter-land': [27, 6], 'scribble-valley': [73, 16], 'memory-jungle': [27, 29], 'sound-forest': [73, 40],
-  'syllable-village': [27, 52], 'spelling-station': [73, 63], 'magic-word-island': [27, 75], 'star-castle': [72, 87]
+  'letter-land': [27, 4], 'race-track': [73, 13], 'scribble-valley': [27, 23], 'memory-jungle': [73, 33], 'sound-forest': [27, 43],
+  'syllable-village': [73, 53], 'spelling-station': [27, 63], 'magic-word-island': [73, 73], 'star-castle': [30, 84]
 };
 
 export function HomePage() {

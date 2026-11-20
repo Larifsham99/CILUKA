@@ -105,6 +105,13 @@ async function playGame(page, id) {
         if (t) await jsClick(page, `.fly-balloon:not(.popped)[aria-label="Belon huruf ${t}"]`);
         await wait(600); break;
       }
+      case 'letter-race': {
+        const t = await page.$eval('.race-ask .glyph', e => e.textContent.trim().toLowerCase()).catch(() => null);
+        const w = t ? null : await page.$eval('.race-ask svg', e => e.getAttribute('aria-label')).catch(() => null);
+        const want = t || (w && w[0]);
+        if (want) await jsClick(page, `.race-sign[aria-label="Huruf ${want}"]`);
+        await wait(400); break;
+      }
       case 'star-challenge': {
         // cuba setiap pilihan sehingga betul (menguji juga keadaan "salah")
         const opts = await page.$$('.letter-bubble:not(.wrong):not(.correct), .obj-opt:not(.wrong):not(.correct)');
@@ -139,7 +146,7 @@ async function playGame(page, id) {
   await wait(800);
   await page.screenshot({ path: `${OUT}/02-peta-dunia.png` });
   ok('Profil dicipta dan peta dunia dipaparkan', await page.$eval('.me-text strong', e => e.textContent) === 'Aisyah');
-  ok('8 pulau dipaparkan', (await page.$$('.island')).length === 8);
+  ok('9 pulau dipaparkan', (await page.$$('.island')).length === 9);
   ok('Pulau berkunci mempunyai keadaan kunci', (await page.$$('.island.locked')).length >= 4);
 
   // 2. Misi harian dari peta
@@ -157,7 +164,7 @@ async function playGame(page, id) {
   ok('Tetapan buka semua disimpan', await page.$eval('#set-unlock', e => e.checked));
 
   // 4. Semua permainan
-  for (const g of ['letter-hunt', 'letter-match', 'letter-balloon', 'memory-letter', 'sound-hunt', 'magic-tracing', 'word-builder', 'missing-letter', 'syllable-puzzle', 'object-match', 'star-challenge']) {
+  for (const g of ['letter-hunt', 'letter-match', 'letter-balloon', 'memory-letter', 'sound-hunt', 'magic-tracing', 'word-builder', 'missing-letter', 'syllable-puzzle', 'object-match', 'letter-race', 'star-challenge']) {
     await playGame(page, g);
   }
 

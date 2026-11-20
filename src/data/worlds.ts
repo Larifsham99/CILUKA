@@ -20,6 +20,7 @@ export const GAMES: Record<GameId, GameInfo> = {
   'word-builder': { id: 'word-builder', name: 'Bina Kata', how: 'Tekan huruf ikut susunan untuk membina perkataan.', skill: 'Membina perkataan', world: 'spelling-station', color: '#2EC4B6' },
   'object-match': { id: 'object-match', name: 'Padan Gambar', how: 'Baca atau dengar perkataan, kemudian pilih gambarnya.', skill: 'Perkataan & makna', world: 'magic-word-island', color: '#9B6BFF' },
   'memory-letter': { id: 'memory-letter', name: 'Kad Ingat', how: 'Buka dua kad. Cari pasangan yang sama.', skill: 'Ingatan', world: 'memory-jungle', color: '#9BDE4A' },
+  'letter-race': { id: 'letter-race', name: 'Lumba Huruf', how: 'Tekan papan huruf yang betul untuk memandu kereta. Betul = nitro!', skill: 'Mengenal huruf & bunyi', world: 'race-track', color: '#FF3D6E' },
   'star-challenge': { id: 'star-challenge', name: 'Cabaran Bintang', how: 'Jawab soalan campuran untuk menjadi juara.', skill: 'Ujian penguasaan', world: 'star-castle', color: '#FFC93C' }
 };
 
@@ -37,6 +38,7 @@ export interface WorldInfo {
 
 export const WORLDS: WorldInfo[] = [
   { id: 'letter-land', name: 'Taman Huruf', english: 'Letter Land', games: ['letter-hunt', 'letter-match', 'letter-balloon'], sky: ['#FFD6EA', '#FFF4FA'], ground: '#FF7EB6', unlock: { kind: 'open' }, unlockText: '' },
+  { id: 'race-track', name: 'Litar Lumba', english: 'Race Track', games: ['letter-race'], sky: ['#FFE1E8', '#FFF6F8'], ground: '#7CC43F', unlock: { kind: 'open' }, unlockText: '' },
   { id: 'scribble-valley', name: 'Lembah Contengan', english: 'Scribble Valley', games: ['magic-tracing'], sky: ['#FFE0C7', '#FFF7EF'], ground: '#FF9F6B', unlock: { kind: 'open' }, unlockText: '' },
   { id: 'memory-jungle', name: 'Rimba Ingat', english: 'Memory Jungle', games: ['memory-letter'], sky: ['#DFF7C6', '#F5FFEC'], ground: '#7CC43F', unlock: { kind: 'open' }, unlockText: '' },
   { id: 'sound-forest', name: 'Hutan Bunyi', english: 'Sound Forest', games: ['sound-hunt'], sky: ['#C9F3EE', '#EFFFFC'], ground: '#2EC4B6', unlock: { kind: 'letters', status: 'belajar', count: 4 }, unlockText: 'Kenal 4 huruf' },

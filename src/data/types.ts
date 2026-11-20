@@ -2,10 +2,10 @@
 
 export type GameId =
   | 'letter-hunt' | 'letter-match' | 'memory-letter' | 'sound-hunt' | 'magic-tracing'
-  | 'word-builder' | 'missing-letter' | 'syllable-puzzle' | 'object-match' | 'letter-balloon' | 'star-challenge';
+  | 'word-builder' | 'missing-letter' | 'syllable-puzzle' | 'object-match' | 'letter-balloon' | 'star-challenge' | 'letter-race';
 
 export type WorldId =
-  | 'letter-land' | 'scribble-valley' | 'sound-forest' | 'syllable-village'
+  | 'letter-land' | 'race-track' | 'scribble-valley' | 'sound-forest' | 'syllable-village'
   | 'spelling-station' | 'magic-word-island' | 'memory-jungle' | 'star-castle';
 
 export type AvatarId = 'kucing' | 'arnab' | 'beruang' | 'katak' | 'singa' | 'panda' | 'monyet' | 'penguin';

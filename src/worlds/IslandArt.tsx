@@ -11,6 +11,15 @@ const LANDMARK: Record<WorldId, ReactElement> = {
     <rect x="76" y="46" width="28" height="32" rx="5" fill="#9B6BFF" {...o} /><text x="90" y="70" textAnchor="middle" fontSize="22" fontWeight="800" fill="#fff" fontFamily="Andika, sans-serif">b</text>
     <rect x="108" y="56" width="22" height="22" rx="5" fill="#FFC93C" {...o} /><text x="119" y="73" textAnchor="middle" fontSize="17" fontWeight="800" fill="#3B2A4D" fontFamily="Andika, sans-serif">c</text>
   </g>,
+  'race-track': <g>
+    <ellipse cx="80" cy="66" rx="52" ry="16" fill="#5B5368" stroke="#3B2A4D" strokeWidth="2.5" />
+    <ellipse cx="80" cy="66" rx="34" ry="8" fill="#9BDE4A" stroke="#3B2A4D" strokeWidth="2" />
+    <ellipse cx="80" cy="66" rx="43" ry="12" fill="none" stroke="#fff" strokeWidth="1.5" strokeDasharray="5 5" />
+    <g transform="translate(46 52) rotate(-12)"><rect x="0" y="0" width="22" height="12" rx="5" fill="#FF3D6E" stroke="#3B2A4D" strokeWidth="2" /><rect x="6" y="2" width="8" height="8" rx="2" fill="#BFEFFF" /></g>
+    <g transform="translate(96 70) rotate(8)"><rect x="0" y="0" width="22" height="12" rx="5" fill="#2EC4B6" stroke="#3B2A4D" strokeWidth="2" /><rect x="6" y="2" width="8" height="8" rx="2" fill="#BFEFFF" /></g>
+    <path d="M118 22 v40" stroke="#3B2A4D" strokeWidth="3" />
+    <g transform="translate(118 22)"><rect width="24" height="16" fill="#fff" stroke="#3B2A4D" strokeWidth="2" /><rect width="6" height="4" fill="#3B2A4D" /><rect x="12" width="6" height="4" fill="#3B2A4D" /><rect x="6" y="4" width="6" height="4" fill="#3B2A4D" /><rect x="18" y="4" width="6" height="4" fill="#3B2A4D" /><rect y="8" width="6" height="4" fill="#3B2A4D" /><rect x="12" y="8" width="6" height="4" fill="#3B2A4D" /><rect x="6" y="12" width="6" height="4" fill="#3B2A4D" /><rect x="18" y="12" width="6" height="4" fill="#3B2A4D" /></g>
+  </g>,
   'scribble-valley': <g>
     <path d="M30 78 q20 -30 40 0 q20 -40 50 0z" fill="#FFB98A" {...o} />
     <g transform="rotate(20 96 44)"><rect x="88" y="14" width="16" height="56" rx="3" fill="#FFC93C" {...o} /><path d="M88 70 l8 16 l8 -16z" fill="#FFE7BF" {...o} /><path d="M93 80 l3 6 l3 -6z" fill="#3B2A4D" /><rect x="88" y="14" width="16" height="10" fill="#FF7EB6" {...o} /></g>

@@ -17,11 +17,12 @@ export const BADGES: BadgeDef[] = [
   { id: 'mission-1', name: 'Misi Pertama', desc: 'Siapkan misi harian', icon: 'flag', color: '#FF7EB6' },
   { id: 'mission-5', name: 'Pengembara Rajin', desc: 'Siapkan misi 5 hari', icon: 'flag', color: '#FFC93C' },
   { id: 'perfect', name: 'Tiga Bintang', desc: 'Dapat 3 bintang', icon: 'star', color: '#FFC93C' },
+  { id: 'racer', name: 'Juara Lumba', desc: 'Tempat pertama Lumba Huruf', icon: 'flag', color: '#FF3D6E' },
   { id: 'champion', name: 'Juara Istana', desc: 'Siap Cabaran Bintang tahap 3', icon: 'trophy', color: '#E8B500' }
 ];
 
 /** Trofi pulau — semua permainan dalam pulau itu disiapkan hingga tahap 3. */
-export const TROPHY_WORLDS: WorldId[] = ['letter-land', 'scribble-valley', 'memory-jungle', 'sound-forest', 'syllable-village', 'spelling-station', 'magic-word-island', 'star-castle'];
+export const TROPHY_WORLDS: WorldId[] = ['letter-land', 'race-track', 'scribble-valley', 'memory-jungle', 'sound-forest', 'syllable-village', 'spelling-station', 'magic-word-island', 'star-castle'];
 
 /** Pelekat koleksi — diperoleh dari Peti Misteri (sekali sehari selepas misi). Semuanya sama nilai: tiada "rarity". */
 export const STICKERS = [

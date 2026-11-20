@@ -14,5 +14,6 @@ export const GAME_COMPONENTS: Record<GameId, LazyExoticComponent<ComponentType<G
   'syllable-puzzle': lazy(() => import('./SyllablePuzzle')),
   'object-match': lazy(() => import('./ObjectMatch')),
   'letter-balloon': lazy(() => import('./LetterBalloon')),
-  'star-challenge': lazy(() => import('./StarChallenge'))
+  'star-challenge': lazy(() => import('./StarChallenge')),
+  'letter-race': lazy(() => import('./LetterRace'))
 };

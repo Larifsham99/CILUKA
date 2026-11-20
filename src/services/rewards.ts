@@ -101,6 +101,7 @@ export function evaluateAwards(d: ProfileData, game?: GameId, level?: number, st
   if (d.missionDays.length >= 5) award(d, 'mission-5', out);
   if (stars === 3) award(d, 'perfect', out);
   if (game === 'star-challenge' && (level ?? 0) >= 3) award(d, 'champion', out);
+  if (game === 'letter-race' && stars === 3) award(d, 'racer', out);
   for (const w of TROPHY_WORLDS) {
     if (WORLD_MAP[w].games.every(g => levelRecord(d, g, 3).plays > 0)) award(d, 'trophy:' + w, out);
   }

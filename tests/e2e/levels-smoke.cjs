@@ -1,7 +1,7 @@
 /* Ujian asap: setiap permainan × setiap tahap (1–5) dibuka, dimulakan dan dimain beberapa ketikan tanpa ralat. */
 const { chromium } = require('playwright');
 const BASE = process.argv[2] || 'http://localhost:4173/';
-const GAMES = ['letter-hunt', 'letter-match', 'letter-balloon', 'memory-letter', 'sound-hunt', 'magic-tracing', 'word-builder', 'missing-letter', 'syllable-puzzle', 'object-match', 'star-challenge'];
+const GAMES = ['letter-hunt', 'letter-match', 'letter-balloon', 'memory-letter', 'sound-hunt', 'magic-tracing', 'word-builder', 'missing-letter', 'syllable-puzzle', 'object-match', 'letter-race', 'star-challenge'];
 (async () => {
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block' });
@@ -22,7 +22,7 @@ const GAMES = ['letter-hunt', 'letter-match', 'letter-balloon', 'memory-letter',
     await p.waitForTimeout(900);
     // beberapa ketikan rawak pada pilihan
     for (let k = 0; k < 4; k++) {
-      const el = await p.$('.letter-bubble:not(.wrong), .tile:not(.used), .syl-piece:not(.used), .obj-opt, .mem-card:not(.up), .match-card:not(.done), .fly-balloon');
+      const el = await p.$('.letter-bubble:not(.wrong), .tile:not(.used), .syl-piece:not(.used), .obj-opt, .mem-card:not(.up), .match-card:not(.done), .fly-balloon, .race-sign');
       if (el) await el.evaluate(e => e.click());
       await p.waitForTimeout(250);
     }

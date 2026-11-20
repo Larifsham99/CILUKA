@@ -5,7 +5,7 @@ import { todayKL } from '../utils/date';
 import { focusLetters } from './learning';
 import { recommendedLevel } from './levels';
 
-const LETTER_GAMES: GameId[] = ['letter-hunt', 'letter-balloon', 'letter-match'];
+const LETTER_GAMES: GameId[] = ['letter-race', 'letter-hunt', 'letter-balloon', 'letter-race', 'letter-match'];
 
 export function ensureDaily(d: ProfileData, age: Age, s: Settings): boolean {
   const today = todayKL();

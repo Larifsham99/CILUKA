@@ -18,7 +18,7 @@ Kemas kini terakhir: 20 November 2026 · Versi 1.0.0
 - [x] Halaman pulau: kad permainan besar, 5 titik tahap, bintang
 - [x] Rangka permainan: Mula (pilih tahap) → Main → Betul/Salah → Keputusan (bintang, XP, lencana baharu, tahap baharu) → Main Lagi / Tahap Seterusnya / Misi Seterusnya
 
-### 11 permainan × 5 tahap (semuanya boleh dimain)
+### 12 permainan × 5 tahap (semuanya boleh dimain)
 | Permainan | Pulau | Mekanik |
 |---|---|---|
 | Cari Huruf | Taman Huruf | pilih huruf disebut; tahap tinggi: huruf serupa & huruf besar |
@@ -32,6 +32,7 @@ Kemas kini terakhir: 20 November 2026 · Versi 1.0.0
 | Bina Kata | Stesen Ejaan | susun huruf ikut gambar; tahap 5 audio sahaja |
 | Padan Gambar | Pulau Kata Ajaib | perkataan → gambar; tahap 4–5 gambar → perkataan |
 | Cabaran Bintang | Istana Bintang | soalan campuran (huruf, bunyi, ejaan, perkataan) |
+| Lumba Huruf | Litar Lumba | kereta berlumba; tekan papan huruf betul untuk pandu ke lorongnya; betul = nitro; tahap 5 bunyi awal |
 
 ### Sistem pembelajaran (Kompas Pip)
 - [x] Skor Kuasa setiap item (huruf, bunyi, tulisan, ejaan, suku kata, perkataan)
